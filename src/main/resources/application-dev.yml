@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      ddl-auto: create-drop
+
+  datasource:
+    url: jdbc:sqlserver://regulus.cotuca.unicamp.br;databaseName=BD19703
+    username: BD19703
+    password: BD19703
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  flyway:
+    enabled: false

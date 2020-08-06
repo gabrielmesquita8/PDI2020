@@ -29,14 +29,36 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
-	testImplementation("org.assertj:assertj-core:3.16.1")
 	testImplementation("io.rest-assured:rest-assured:3.1.1")
+	testImplementation("org.assertj:assertj-core:3.16.1")
 
 }
+tasks["check"].dependsOn("integrationTest")
 
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+sourceSets {
+	create("integrationTest") {
+		withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
+			kotlin.srcDir("src/integrationTest/kotlin")
+			resources.srcDir("src/integrationTest/resources")
+			compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+			runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
+		}
+	}
+}
+
+task<Test>("integrationTest") {
+	description = "Runs the integration tests"
+	group = "verification"
+	testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+	classpath = sourceSets["integrationTest"].runtimeClasspath
+	mustRunAfter(tasks["test"])
+}
+
+tasks["check"].dependsOn("integrationTest")
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {

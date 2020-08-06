@@ -1,4 +1,4 @@
-package PSN.crudPDI
+package PSN.crudPDI.integrationTest
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

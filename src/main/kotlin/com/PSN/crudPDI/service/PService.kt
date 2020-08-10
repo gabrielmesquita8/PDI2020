@@ -3,17 +3,16 @@ package com.PSN.crudPDI.service
 import com.PSN.crudPDI.model.PSN4
 import com.PSN.crudPDI.repository.PSRepository
 import com.fasterxml.jackson.databind.ObjectMapper
-import javassist.tools.web.BadHttpRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
 import javax.persistence.EntityNotFoundException
-import javax.transaction.Transactional
 
 
 @Service

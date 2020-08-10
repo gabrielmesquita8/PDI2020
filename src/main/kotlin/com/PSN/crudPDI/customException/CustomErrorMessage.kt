@@ -24,7 +24,7 @@ class CustomErrorMessage : ResponseEntityExceptionHandler()
         val details: MutableList<String> = ArrayList()
         details.add("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe")
         val error = ErrorResponse(Date(), 400, details)
-        return ResponseEntity(error, HttpStatus.NOT_FOUND)
+        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
 
 }

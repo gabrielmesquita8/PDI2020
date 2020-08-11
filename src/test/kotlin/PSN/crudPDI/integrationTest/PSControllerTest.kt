@@ -114,12 +114,12 @@ class PSControllerTest {
     @Test
     fun`Quando realiza uma operação PATCH com dados corretos a operação deve ser executada com sucesso`()
     {
-        val patch: String = "Shrek"
+        val value: String = "Shrek"
         val id: Long = 1
         val before = repository.findById(id)
-        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(patch)
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-            assertThat(before.get().nome).isNotEqualTo(payload)
+        assertThat(before.get().nome).isNotEqualTo(payload)
 
             given()
                 .config(
@@ -142,7 +142,7 @@ class PSControllerTest {
     }
 
     @Test
-    fun`Dado que seja feito uma busca por ID inexistene é retornado erro 400`()
+    fun`Dado que seja feito uma busca por um ID inexistente é retornado erro 400`()
     {
         val id: Long = 18
 

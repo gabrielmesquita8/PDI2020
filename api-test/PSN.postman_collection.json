@@ -1,0 +1,808 @@
+{
+	"info": {
+		"_postman_id": "220d0e30-427a-48e5-948a-c7f82875617b",
+		"name": "PSN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ALL_PLAYERS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a69d663-d1f6-418e-ac75-f9b0d9963acf",
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Validação de campos que não podem ser nulos\", function () ",
+							"{",
+							"   _.each(pm.response.json(), (player) => {",
+							"       pm.expect(player).to.have.property(\"id\").not.equal(null);",
+							"       pm.expect(player).to.have.property(\"nome\").not.equal(null);",
+							"       pm.expect(player).to.have.property(\"idtag\").not.equal(null);",
+							"   });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/allPlayers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"allPlayers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ID_PLAYERS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0d93d42d-1b7b-4832-8f57-bb96e4b32d85",
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Validação de campos que não podem ser nulos\", function () ",
+							"{",
+							"    pm.expect(jsonData).to.have.property(\"id\").not.equal(null);",
+							"    pm.expect(jsonData).to.have.property(\"nome\").not.equal(null);",
+							"    pm.expect(jsonData).to.have.property(\"idtag\").not.equal(null);",
+							"   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/idPlayer/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"idPlayer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST_PLAYER",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "337b2aa3-3a57-4a5c-96ec-3c29eab5222e",
+						"exec": [
+							"pm.test(\"Status code é 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"F\",\n\t\"idtag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_NOME",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9357ec90-42a1-4641-8b8d-8a0cd337ecb2",
+						"exec": [
+							"pm.test(\"Status code é 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Bruce Wayne\",\n\t\"genero\": \"F\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/nome/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"nome",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_GENERO",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c73f2627-50fa-4ef6-a25e-c7d164d06944",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0a986ba7-326e-46b8-954e-da301f47a884",
+						"exec": [
+							"pm.test(\"Status code é 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"M\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/genero/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"genero",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_ID_TAG",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f4327f-60d1-43bc-8a8e-b54b4da92d6a",
+						"exec": [
+							"pm.test(\"Status code é 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"F\",\n\t\"idtag\": \"Batman\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/IdTag/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"IdTag",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_JOGOS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "31471d11-e0f9-41c1-bbc1-8e5019f62b1f",
+						"exec": [
+							"pm.test(\"Status code é 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"F\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 30,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/jogos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"jogos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_TROFEU",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eb4b8b15-2747-428d-a3b3-c0a6b6fc328d",
+						"exec": [
+							"pm.test(\"Status code é 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"F\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 9930,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/trofeu/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"trofeu",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_AVALICACAO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2775ba64-5c0e-4c0b-b811-76f237e3d384",
+						"exec": [
+							"pm.test(\"Status code é 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"F\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 8\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/avaliacao/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"avaliacao",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE_PLAYER",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "edc5cc4b-ea6a-4369-95c1-b4fd32d32dff",
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/delPSN/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"delPSN",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PlayerNotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eb500145-8276-41f0-8fbd-e1d0c0c5e357",
+						"exec": [
+							"pm.test(\"Status code é 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter o campo timestamp\", function() {",
+							"    pm.expect(pm.response.json()).to.have.property(\"timestamp\")",
+							"});",
+							"",
+							"var responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Resposta deve conter o campo message\", function() {",
+							"    pm.expect(responseJSON.message[0]).to.include('O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/idPlayer/20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"idPlayer",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST_EMPTY",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc9efc28-fe9f-4223-bb85-ad4bae81d747",
+						"exec": [
+							"pm.test(\"Status code é 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter o campo timestamp\", function() {",
+							"    pm.expect(pm.response.json()).to.have.property(\"timestamp\")",
+							"});",
+							"",
+							"var responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Resposta deve conter o campo message\", function() {",
+							"    pm.expect(responseJSON.message[0]).to.include('O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"\",\n\t\"genero\": \"F\",\n\t\"idtag\": \"\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NAME_EMPTY",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bf4054f6-5e85-43c3-9166-0f4eefdc6009",
+						"exec": [
+							"pm.test(\"Status code é 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter o campo timestamp\", function() {",
+							"    pm.expect(pm.response.json()).to.have.property(\"timestamp\")",
+							"});",
+							"",
+							"var responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Resposta deve conter o campo message\", function() {",
+							"    pm.expect(responseJSON.message[0]).to.include('O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"\",\n\t\"genero\": \"F\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/nome/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"nome",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GENERO_EMPTY",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5317c8de-bdb4-4f63-86d9-d380f23cafbc",
+						"exec": [
+							"pm.test(\"Status code é 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter o campo timestamp\", function() {",
+							"    pm.expect(pm.response.json()).to.have.property(\"timestamp\")",
+							"});",
+							"",
+							"var responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Resposta deve conter o campo message\", function() {",
+							"    pm.expect(pm.response.json()).to.have.property(\"error\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"\",\n\t\"idTag\": \"Zirael\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/genero/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"genero",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ID_TAG_EMPTY",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "72c9b681-d300-4f75-9c23-fb611c752117",
+						"exec": [
+							"pm.test(\"Status code é 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve ser em JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta no maximo em 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter o campo timestamp\", function() {",
+							"    pm.expect(pm.response.json()).to.have.property(\"timestamp\")",
+							"});",
+							"",
+							"var responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Resposta deve conter o campo message\", function() {",
+							"    pm.expect(responseJSON.message[0]).to.include('O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Ciri\",\n\t\"genero\": \"F\",\n\t\"idtag\": \"\",\n\t\"jogos\": 28,\n    \"trofeu\": 8800,\n    \"avaliacao\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/CrudPDI/PSN/IdTag/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CrudPDI",
+						"PSN",
+						"IdTag",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7c542de1-1e48-4981-936c-3138cbcd961c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1b3d805b-29e7-473a-bbe8-e0b1dfa82dc5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -26,5 +26,6 @@ class CustomErrorMessage : ResponseEntityExceptionHandler()
         val error = ErrorResponse(Date(), 400, details)
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
+    //TODO corrigir
 
 }

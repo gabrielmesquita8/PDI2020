@@ -113,7 +113,7 @@ class PSControllerTest {
     //TODO não funcionando
     @Test
     fun `Quando realiza uma operação PATCH com dados corretos a operação deve ser executada com sucesso`() {
-        val value = "Shrek"
+        val value = mapOf("nome" to "Shrek")
         val id: Long = 1
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
@@ -136,7 +136,7 @@ class PSControllerTest {
             .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
-        assertThat(validatePlayer.get().nome).isEqualTo(payload)
+        assertThat(validatePlayer.get().nome).isEqualTo(value["nome"])
         assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("nome").isEqualTo(before.get())
     }
 
@@ -189,10 +189,10 @@ class PSControllerTest {
             .statusCode(BAD_REQUEST.value())
             .spec(
                 expect()
-                    //.header("content-type", `is`(APPLICATION_JSON.toString()))
+                  //  .header("content-type", `is`(APPLICATION_JSON.toString()))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    //.body("message", `is`(equalTo("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe")))
+                    .body("message", `is`(equalTo("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe")))
             )
     }
 

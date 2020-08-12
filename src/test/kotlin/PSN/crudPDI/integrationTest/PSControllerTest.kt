@@ -40,8 +40,8 @@ class PSControllerTest {
         val findBD = repository.findAll()
         val findAPI = given()
                 .config(
-                        config()
-                                .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                     config()
+                        .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
                 )
                 .port(port)
                 .log().all()
@@ -53,7 +53,7 @@ class PSControllerTest {
                 .statusCode(OK.value())
                 .spec(
                     expect()
-                       //TODO  Falhando ->.header("content-type", `is`((APPLICATION_JSON.toString())))
+                      //  .header("content-type", `is`((APPLICATION_JSON.toString())))
                         .body("$", not(emptyOrNullString()))
                 )
                 .extract().body().jsonPath().getList(".", PSN4::class.java)
@@ -110,9 +110,9 @@ class PSControllerTest {
 
     }
 
-    //TODO não funcionando
+
     @Test
-    fun `Quando realiza uma operação PATCH com dados corretos a operação deve ser executada com sucesso`() {
+    fun `Quando realiza uma operação PATCH para alterar o nome com dados corretos a operação deve ser executada com sucesso`() {
         val value = mapOf("nome" to "Shrek")
         val id: Long = 1
         val before = repository.findById(id)
@@ -140,6 +140,193 @@ class PSControllerTest {
         assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("nome").isEqualTo(before.get())
     }
 
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o genero com dados corretos a operação deve ser executada com sucesso`() {
+        val value = mapOf("genero" to "F")
+        val id: Long = 1
+        val before = repository.findById(id)
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+
+        assertThat(before.get().genero).isNotEqualTo(payload)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/genero/$id")
+            .then()
+            .log().all()
+            .statusCode(NO_CONTENT.value())
+
+        val validatePlayer = repository.findById(id)
+        assertThat(validatePlayer.get().genero).isEqualTo(value["genero"])
+        assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("genero").isEqualTo(before.get())
+    }
+
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o idTag com dados corretos a operação deve ser executada com sucesso`() {
+        val value = mapOf("idtag" to "Superman")
+        val id: Long = 1
+        val before = repository.findById(id)
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+
+        assertThat(before.get().idtag).isNotEqualTo(payload)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/IdTag/$id")
+            .then()
+            .log().all()
+            .statusCode(NO_CONTENT.value())
+
+        val validatePlayer = repository.findById(id)
+        assertThat(validatePlayer.get().idtag).isEqualTo(value["idtag"])
+        assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("idtag").isEqualTo(before.get())
+    }
+
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o campo jogos com dados corretos a operação deve ser executada com sucesso`() {
+        val value = mapOf("jogos" to 8)
+        val id: Long = 1
+        val before = repository.findById(id)
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+
+        assertThat(before.get().jogos).isNotEqualTo(payload)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/jogos/$id")
+            .then()
+            .log().all()
+            .statusCode(NO_CONTENT.value())
+
+        val validatePlayer = repository.findById(id)
+        assertThat(validatePlayer.get().jogos).isEqualTo(value["jogos"])
+        assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("jogos").isEqualTo(before.get())
+    }
+
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o campo trofeus com dados corretos a operação deve ser executada com sucesso`() {
+        val value = mapOf("trofeu" to 808)
+        val id: Long = 1
+        val before = repository.findById(id)
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+
+        assertThat(before.get().trofeu).isNotEqualTo(payload)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/trofeu/$id")
+            .then()
+            .log().all()
+            .statusCode(NO_CONTENT.value())
+
+        val validatePlayer = repository.findById(id)
+        assertThat(validatePlayer.get().trofeu).isEqualTo(value["trofeu"])
+        assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("trofeu").isEqualTo(before.get())
+    }
+
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o campo avaliação com dados corretos a operação deve ser executada com sucesso`() {
+        val value = mapOf("avaliacao" to 8)
+        val id: Long = 1
+        val before = repository.findById(id)
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+
+        assertThat(before.get().avaliacao).isNotEqualTo(payload)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/avaliacao/$id")
+            .then()
+            .log().all()
+            .statusCode(NO_CONTENT.value())
+
+        val validatePlayer = repository.findById(id)
+        assertThat(validatePlayer.get().avaliacao).isEqualTo(value["avaliacao"])
+        assertThat(validatePlayer.get()).usingRecursiveComparison().ignoringFields("avaliacao").isEqualTo(before.get())
+    }
+
+    @Test
+    fun `Quando realiza uma operação de DELETE com dados corretos a operação deve ser executada com sucesso`() {
+
+        val id: Long = 1
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .delete("$PATH/delPSN/$id")
+            .then()
+            .log().all()
+            .statusCode(OK.value())
+
+        val validatePlayer = repository.findById(id)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .get("$PATH/idPlayer/$id")
+            .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value())
+            .spec(
+                expect()
+                    .body("timestamp", `is`(not(emptyOrNullString())))
+                    .body("status", `is`(equalTo(BAD_REQUEST.value())))
+                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+            )
+    }
+
     //TODO Cenários negativos
 
     @Test
@@ -164,7 +351,7 @@ class PSControllerTest {
                     //.header("content-type", `is`(APPLICATION_JSON.toString()))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    // .body("message", `is`(equalTo("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe")))
+                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
             )
     }
 
@@ -192,8 +379,76 @@ class PSControllerTest {
                   //  .header("content-type", `is`(APPLICATION_JSON.toString()))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", `is`(equalTo("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe")))
+                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
             )
+    }
+
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o campo nome com dados incorretos a operação deve ser retornar erro 400`() {
+        val value = mapOf("nome" to "")
+        val id: Long = 1
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+        val before = repository.findById(id)
+        assertThat(before.get()).isNotEqualTo(value)
+
+        given()
+            .config(
+                 config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/nome/$id")
+            .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value())
+            .spec(
+                expect()
+                    //.header("content-type", `is`(APPLICATION_JSON.toString()))
+                    .body("timestamp", `is`(not(emptyOrNullString())))
+                    .body("status", `is`(equalTo(BAD_REQUEST.value())))
+                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+            )
+
+        val after = repository.findById(id)
+        assertThat(after).isNotEqualTo(payload)
+    }
+
+    @Test
+    fun `Quando realiza uma operação PATCH para alterar o campo genero com dados incorretos a operação deve ser retornar erro 400`() {
+        val value = mapOf("idtag" to "")
+        val id: Long = 1
+        val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
+        val before = repository.findById(id)
+        assertThat(before.get()).isNotEqualTo(value)
+
+        given()
+            .config(
+                config()
+                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+            )
+            .port(port)
+            .log().all()
+            .contentType(APPLICATION_JSON.toString())
+            .`when`()
+            .body(payload)
+            .patch("$PATH/PSN/IdTag/$id")
+            .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value())
+            .spec(
+                expect()
+                    //.header("content-type", `is`(APPLICATION_JSON.toString()))
+                    .body("timestamp", `is`(not(emptyOrNullString())))
+                    .body("status", `is`(equalTo(BAD_REQUEST.value())))
+                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+            )
+
+        val after = repository.findById(id)
+        assertThat(after).isNotEqualTo(payload)
     }
 
 }

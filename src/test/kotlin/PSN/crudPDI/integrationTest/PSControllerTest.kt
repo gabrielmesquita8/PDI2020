@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
-import java.util.*
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [CrudPsnApplication::class])
 class PSControllerTest {
@@ -41,11 +40,11 @@ class PSControllerTest {
         val findAPI = given()
                 .config(
                      config()
-                        .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                        .encoderConfig(encoderConfig().encodeContentTypeAs("\"application/json\"", ContentType.TEXT))
                 )
                 .port(port)
                 .log().all()
-                .contentType(APPLICATION_JSON.toString())
+                .contentType("application/json")
                 .`when`()
                 .get("$PATH/allPlayers")
                 .then()
@@ -53,7 +52,7 @@ class PSControllerTest {
                 .statusCode(OK.value())
                 .spec(
                     expect()
-                      //  .header("content-type", `is`((APPLICATION_JSON.toString())))
+                        .header("content-type", `is`(("application/json")))
                         .body("$", not(emptyOrNullString()))
                 )
                 .extract().body().jsonPath().getList(".", PSN4::class.java)
@@ -304,16 +303,14 @@ class PSControllerTest {
             .log().all()
             .statusCode(OK.value())
 
-        val validatePlayer = repository.findById(id)
-
         given()
             .config(
                 config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
             )
             .port(port)
             .log().all()
-            .contentType(APPLICATION_JSON.toString())
+            .contentType("application/json")
             .`when`()
             .get("$PATH/idPlayer/$id")
             .then()
@@ -321,13 +318,12 @@ class PSControllerTest {
             .statusCode(BAD_REQUEST.value())
             .spec(
                 expect()
+                    .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
                     .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
             )
     }
-
-    //TODO Cenários negativos
 
     @Test
     fun `Dado que seja feito uma busca por um ID inexistente é retornado erro 400`() {
@@ -336,11 +332,11 @@ class PSControllerTest {
         given()
             .config(
                 config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
             )
             .port(port)
             .log().all()
-            .contentType(APPLICATION_JSON.toString())
+            .contentType("application/json")
             .`when`()
             .get("$PATH/idPlayer/$id")
             .then()
@@ -348,7 +344,7 @@ class PSControllerTest {
             .statusCode(BAD_REQUEST.value())
             .spec(
                 expect()
-                    //.header("content-type", `is`(APPLICATION_JSON.toString()))
+                    .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
                     .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
@@ -363,11 +359,11 @@ class PSControllerTest {
         given()
             .config(
                  config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
             )
             .port(port)
             .log().all()
-            .contentType(APPLICATION_JSON.toString())
+            .contentType("application/json")
             .`when`()
             .body(payload)
             .post("$PATH")
@@ -376,7 +372,7 @@ class PSControllerTest {
             .statusCode(BAD_REQUEST.value())
             .spec(
                 expect()
-                  //  .header("content-type", `is`(APPLICATION_JSON.toString()))
+                    .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
                     .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
@@ -394,11 +390,11 @@ class PSControllerTest {
         given()
             .config(
                  config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
             )
             .port(port)
             .log().all()
-            .contentType(APPLICATION_JSON.toString())
+            .contentType("application/json")
             .`when`()
             .body(payload)
             .patch("$PATH/PSN/nome/$id")
@@ -407,7 +403,7 @@ class PSControllerTest {
             .statusCode(BAD_REQUEST.value())
             .spec(
                 expect()
-                    //.header("content-type", `is`(APPLICATION_JSON.toString()))
+                    .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
                     .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
@@ -428,11 +424,11 @@ class PSControllerTest {
         given()
             .config(
                 config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
+                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
             )
             .port(port)
             .log().all()
-            .contentType(APPLICATION_JSON.toString())
+            .contentType("application/json")
             .`when`()
             .body(payload)
             .patch("$PATH/PSN/IdTag/$id")
@@ -441,7 +437,7 @@ class PSControllerTest {
             .statusCode(BAD_REQUEST.value())
             .spec(
                 expect()
-                    //.header("content-type", `is`(APPLICATION_JSON.toString()))
+                    .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
                     .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))

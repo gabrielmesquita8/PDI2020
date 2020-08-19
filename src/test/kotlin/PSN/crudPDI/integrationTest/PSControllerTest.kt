@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.apache.http.entity.ContentType.APPLICATION_JSON
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,10 +27,18 @@ class PSControllerTest {
 
     @Autowired
     private lateinit var repository: PSRepository
+    private lateinit var dump: MutableIterable<PSN4>
+    private val PATH: String = "/CrudPDI"
 
-    companion object {
-        private const val CONTENT_TYPE_JSON: String = "{\"type\":\"application\",\"subtype\":\"json\",\"parameters\":{\"charset\":\"UTF-8\"},\"qualityValue\":1.0,\"concrete\":true,\"wildcardType\":false,\"wildcardSubtype\":false,\"charset\":\"UTF-8\"}"
-        private const val PATH: String = "/CrudPDI"
+
+    @BeforeEach
+    fun init() {
+        dump = repository.findAll()
+    }
+
+    @AfterEach
+    fun save() {
+        repository.saveAll(dump)
     }
 
     @LocalServerPort
@@ -64,10 +74,6 @@ class PSControllerTest {
         val id: Long = 1
         val findBD = repository.findById(id)
         val findAPI = given()
-                .config(
-                        config()
-                                .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-                )
                 .port(port)
                 .log().all()
                 .contentType(APPLICATION_JSON.toString())
@@ -87,10 +93,6 @@ class PSControllerTest {
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(player)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -120,10 +122,6 @@ class PSControllerTest {
         assertThat(before.get().nome).isNotEqualTo(payload)
 
         given()
-            .config(
-                 config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -149,10 +147,6 @@ class PSControllerTest {
         assertThat(before.get().genero).isNotEqualTo(payload)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -178,10 +172,6 @@ class PSControllerTest {
         assertThat(before.get().idtag).isNotEqualTo(payload)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -207,10 +197,6 @@ class PSControllerTest {
         assertThat(before.get().jogos).isNotEqualTo(payload)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -236,10 +222,6 @@ class PSControllerTest {
         assertThat(before.get().trofeu).isNotEqualTo(payload)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -265,10 +247,6 @@ class PSControllerTest {
         assertThat(before.get().avaliacao).isNotEqualTo(payload)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())
@@ -287,13 +265,9 @@ class PSControllerTest {
     @Test
     fun `Quando realiza uma operação de DELETE com dados corretos a operação deve ser executada com sucesso`() {
 
-        val id: Long = 1
+        val id: Long = 4
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs(CONTENT_TYPE_JSON, ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType(APPLICATION_JSON.toString())

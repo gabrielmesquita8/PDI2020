@@ -119,7 +119,7 @@ class PSControllerTest {
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-        assertThat(before.get().nome).isNotEqualTo(payload)
+        assertThat(before.get().nome).isNotEqualTo(value["nome"])
 
         given()
             .port(port)
@@ -144,7 +144,7 @@ class PSControllerTest {
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-        assertThat(before.get().genero).isNotEqualTo(payload)
+        assertThat(before.get().genero).isNotEqualTo(value["genero"])
 
         given()
             .port(port)
@@ -169,7 +169,7 @@ class PSControllerTest {
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-        assertThat(before.get().idtag).isNotEqualTo(payload)
+        assertThat(before.get().idtag).isNotEqualTo(value["idtag"])
 
         given()
             .port(port)
@@ -194,7 +194,7 @@ class PSControllerTest {
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-        assertThat(before.get().jogos).isNotEqualTo(payload)
+        assertThat(before.get().jogos).isNotEqualTo(value["jogos"])
 
         given()
             .port(port)
@@ -219,7 +219,7 @@ class PSControllerTest {
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-        assertThat(before.get().trofeu).isNotEqualTo(payload)
+        assertThat(before.get().trofeu).isNotEqualTo(value["trofeu"])
 
         given()
             .port(port)
@@ -239,12 +239,12 @@ class PSControllerTest {
 
     @Test
     fun `Quando realiza uma operação PATCH para alterar o campo avaliação com dados corretos a operação deve ser executada com sucesso`() {
-        val value = mapOf("avaliacao" to 8)
+        val value = mapOf("avaliacao" to 9)
         val id: Long = 1
         val before = repository.findById(id)
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(value)
 
-        assertThat(before.get().avaliacao).isNotEqualTo(payload)
+        assertThat(before.get().avaliacao).isNotEqualTo(value["avaliacao"])
 
         given()
             .port(port)

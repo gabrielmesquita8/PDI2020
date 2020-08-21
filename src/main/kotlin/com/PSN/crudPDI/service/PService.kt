@@ -18,8 +18,7 @@ import javax.persistence.EntityNotFoundException
 @Service
 class PService (
         @Autowired
-        private val psRepository: PSRepository,
-        private val objectMapper: ObjectMapper
+        private val psRepository: PSRepository
 ){
 
     fun getAllPlayers(): MutableIterable<PSN4>
@@ -27,10 +26,11 @@ class PService (
         return psRepository.findAll()
     }
 
-    fun getPlayerById(id: Long) : Optional<PSN4>
+    fun getPlayerById(id: Long) : PSN4
     {
-        validatePlayerExist(id)
-        return psRepository.findById(id)
+        return psRepository.findById(id).orElseThrow {
+            EntityNotFoundException()
+        }
     }
 
     @Transactional
@@ -58,7 +58,6 @@ class PService (
     fun UpdateName(@PathVariable(value = "id") id: Long,
                    @RequestBody newNome: PSN4): ResponseEntity<PSN4>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { tag ->
             val updateNome: PSN4 = tag
                     .copy(nome = newNome.nome)
@@ -67,30 +66,24 @@ class PService (
                 throw Exception()
             }
             ResponseEntity.ok().body(psRepository.save(updateNome))
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
     }
 
     @Transactional
     fun UpdateGenero(@PathVariable(value = "id") id: Long,
                      @RequestBody newG: PSN4): ResponseEntity<PSN4>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { tag ->
             val updateG: PSN4 = tag
                     .copy(genero = newG.genero)
-            if (newG.genero.trim().isEmpty() )
-            {
-                throw Exception()
-            }
             ResponseEntity.ok().body(psRepository.save(updateG))
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
     }
 
     @Transactional
     fun UpdateIdTag(@PathVariable(value = "id") id: Long,
                     @RequestBody newTag: PSN4): ResponseEntity<PSN4>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { tag ->
             val updateTag: PSN4 = tag
                     .copy(idtag = newTag.idtag)
@@ -99,71 +92,49 @@ class PService (
                 throw Exception()
             }
             ResponseEntity.ok().body(psRepository.save(updateTag))
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
     }
 
     @Transactional
     fun UpdateJogos(@PathVariable(value = "id") id: Long,
                     @RequestBody newGame: PSN4): ResponseEntity<PSN4>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { tag ->
             val updateGame: PSN4 = tag
                     .copy(jogos = newGame.jogos)
             ResponseEntity.ok().body(psRepository.save(updateGame))
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
     }
 
     @Transactional
     fun UpdateTrofeu(@PathVariable(value = "id") id: Long,
                      @RequestBody newTrofeu: PSN4): ResponseEntity<PSN4>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { tag ->
             val updateTrofeu: PSN4 = tag
                     .copy(trofeu = newTrofeu.trofeu)
             ResponseEntity.ok().body(psRepository.save(updateTrofeu))
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
     }
 
     @Transactional
     fun UpdateAvaliacao(@PathVariable(value = "id") id: Long,
                         @RequestBody newAvaliacao: PSN4): ResponseEntity<PSN4>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { tag ->
             val updateAvaliacao: PSN4 = tag
                     .copy(avaliacao = newAvaliacao.avaliacao)
             ResponseEntity.ok().body(psRepository.save(updateAvaliacao))
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
     }
 
     @DeleteMapping("/delPSN/{id}")
     fun deletePlayerById(@PathVariable(value = "id") id: Long): ResponseEntity<Void>
     {
-        validatePlayerExist(id)
         return psRepository.findById(id).map { play  ->
             psRepository.delete(play)
             ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
+        }.orElseThrow { EntityNotFoundException() }
 
     }
-
-    /*
-     Método que valida a existência do id.
-     Esse throw é substituído pela classe CustomErrorMessage
-     Ele continua aqui porque sem ele não entra na classe da exceção
-     */
-    private fun validatePlayerExist(id: Long): Boolean
-    {
-        if(psRepository.existsById(id))
-        {
-            return true
-        }
-        else
-        {
-            throw EntityNotFoundException("Player com $id não encontrado")
-        }
-    }
-
 }

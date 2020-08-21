@@ -18,7 +18,7 @@ class PSController(private val psRepository: PSRepository, private val pservice:
             pservice.getAllPlayers()
 
     @GetMapping("/idPlayer/{id}")
-    fun getById(@PathVariable id: Long): ResponseEntity<Optional<PSN4>>
+    fun getById(@PathVariable id: Long): ResponseEntity<PSN4>
     {
         val play = pservice.getPlayerById(id)
         return ResponseEntity.ok(play)

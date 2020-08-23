@@ -9,13 +9,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.*
 import javax.persistence.EntityNotFoundException
 
-/*
-@ControllerAdvice é uma anotação que permite centralizar as exceptions nesta classe.
-Quando ocorre alguma exceção o spring "entra" nesta classe e procura pelo Handler com a exceção correspondente
-O motivo de haver apenas um método era porque quando ocorria uma exceção ele exibia código 500 e também o trace.
-Agora quando ocorre esse erro ele exibe 404 junto com a mensgagem "O Id buscado não existe".
- */
-
 @ControllerAdvice
 class CustomErrorMessage : ResponseEntityExceptionHandler()
 {

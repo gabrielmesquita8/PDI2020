@@ -21,7 +21,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.test.annotation.DirtiesContext
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [CrudPsnApplication::class])
 class PSControllerTest {
 
@@ -265,7 +267,7 @@ class PSControllerTest {
     @Test
     fun `Quando realiza uma operação de DELETE com dados corretos a operação deve ser executada com sucesso`() {
 
-        val id: Long = 4
+        val id: Long = 1
 
         given()
             .port(port)
@@ -289,13 +291,13 @@ class PSControllerTest {
             .get("$PATH/idPlayer/$id")
             .then()
             .log().all()
-            .statusCode(BAD_REQUEST.value())
+            .statusCode(NOT_FOUND.value())
             .spec(
                 expect()
                     .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
-                    .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+                    .body("status", `is`(equalTo(NOT_FOUND.value())))
+                    .body("message", hasItem("O Id buscado não existe!"))
             )
     }
 
@@ -304,10 +306,6 @@ class PSControllerTest {
         val id: Long = 18
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType("application/json")
@@ -315,13 +313,13 @@ class PSControllerTest {
             .get("$PATH/idPlayer/$id")
             .then()
             .log().all()
-            .statusCode(BAD_REQUEST.value())
+            .statusCode(NOT_FOUND.value())
             .spec(
                 expect()
                     .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
-                    .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+                    .body("status", `is`(equalTo(NOT_FOUND.value())))
+                    .body("message", hasItem("O Id buscado não existe!"))
             )
     }
 
@@ -331,10 +329,6 @@ class PSControllerTest {
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(player)
 
         given()
-            .config(
-                 config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType("application/json")
@@ -349,7 +343,7 @@ class PSControllerTest {
                     .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+                    .body("message", hasItem("Ocorreu um erro em sua requisição, verifique sua sintaxe!"))
             )
     }
 
@@ -380,7 +374,7 @@ class PSControllerTest {
                     .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+                    .body("message", hasItem("Ocorreu um erro em sua requisição, verifique sua sintaxe!"))
             )
 
         val after = repository.findById(id)
@@ -414,7 +408,7 @@ class PSControllerTest {
                     .header("content-type", `is`(("application/json")))
                     .body("timestamp", `is`(not(emptyOrNullString())))
                     .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", hasItem("O Id buscado não existe ou não foi possível realizar a operação devido a sintaxe"))
+                    .body("message", hasItem("Ocorreu um erro em sua requisição, verifique sua sintaxe!"))
             )
 
         val after = repository.findById(id)

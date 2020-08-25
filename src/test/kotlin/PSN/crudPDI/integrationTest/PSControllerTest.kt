@@ -29,19 +29,7 @@ class PSControllerTest {
 
     @Autowired
     private lateinit var repository: PSRepository
-    private lateinit var dump: MutableIterable<PSN4>
     private val PATH: String = "/CrudPDI"
-
-
-    @BeforeEach
-    fun init() {
-        dump = repository.findAll()
-    }
-
-    @AfterEach
-    fun save() {
-        repository.saveAll(dump)
-    }
 
     @LocalServerPort
     internal var port: Int = 0
@@ -50,10 +38,6 @@ class PSControllerTest {
     fun `Dado que a operação seja um sucesso é retornado uma lista com todos os jogadores`() {
         val findBD = repository.findAll()
         val findAPI = given()
-                .config(
-                     config()
-                        .encoderConfig(encoderConfig().encodeContentTypeAs("\"application/json\"", ContentType.TEXT))
-                )
                 .port(port)
                 .log().all()
                 .contentType("application/json")
@@ -280,10 +264,6 @@ class PSControllerTest {
             .statusCode(OK.value())
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType("application/json")
@@ -356,10 +336,6 @@ class PSControllerTest {
         assertThat(before.get()).isNotEqualTo(value)
 
         given()
-            .config(
-                 config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType("application/json")
@@ -390,10 +366,6 @@ class PSControllerTest {
         assertThat(before.get()).isNotEqualTo(value)
 
         given()
-            .config(
-                config()
-                    .encoderConfig(encoderConfig().encodeContentTypeAs("application/json", ContentType.TEXT))
-            )
             .port(port)
             .log().all()
             .contentType("application/json")

@@ -8,3 +8,6 @@ import org.springframework.stereotype.Repository
 //Essa é a classe DAO, com a extensão do crud todos os métodos CRUD são importados
 @Repository
 interface PSRepository : CrudRepository<PSN4, Long>
+{
+    fun findByNome(nome: String?): PSN4
+}

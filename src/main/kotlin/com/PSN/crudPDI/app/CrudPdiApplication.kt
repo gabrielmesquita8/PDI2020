@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = ["com.PSN.crudPDI"])
+@ConfigurationPropertiesScan(basePackages = ["com.PSN.crudPDI.security"])
 @EnableJpaRepositories(basePackages = ["com.PSN.crudPDI.repository"])
 @EntityScan(basePackages = ["com.PSN.crudPDI.model"])
 class CrudPsnApplication

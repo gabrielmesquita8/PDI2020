@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,9 +20,6 @@ class PService (
         @Autowired
         private val psRepository: PSRepository
 ){
-
-    @Autowired
-    private lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
 
     fun getAllPlayers(): MutableIterable<PSN4>
     {
@@ -46,9 +42,9 @@ class PService (
         }
 
         return PSN4(
-                nome = bCryptPasswordEncoder.encode(player.nome),
+                nome = player.nome,
                 genero = player.genero,
-                idtag = bCryptPasswordEncoder.encode(player.idtag),
+                idtag = player.idtag,
                 jogos = player.jogos,
                 trofeu = player.trofeu,
                 avaliacao = player.avaliacao

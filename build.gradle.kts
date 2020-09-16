@@ -20,6 +20,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	//implementation ("org.springframework.boot:spring-boot-starter-security")
+	implementation ("org.mindrot:jbcrypt:0.4")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation ("io.jsonwebtoken:jjwt:0.6.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

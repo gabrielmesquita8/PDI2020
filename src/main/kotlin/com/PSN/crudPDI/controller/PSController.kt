@@ -7,12 +7,18 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.util.*
 
 @RestController
 @RequestMapping("/CrudPDI")
 class PSController(private val psRepository: PSRepository, private val pservice: PService)
 {
+    @PostMapping("/login")
+    fun loginUser(@RequestBody userMap: Map<String, String>): ResponseEntity<Map<String, Any>> {
+        val nome = userMap["nome"] as String
+        val idtag = userMap["idtag"] as String
+        val user: PSN4? = pservice.validatePlayer(nome, idtag)
+        return ResponseEntity(userMap, HttpStatus.OK)
+    }
     @GetMapping("/allPlayers")
     fun getAllPlayers(): MutableIterable<PSN4> =
             pservice.getAllPlayers()
@@ -86,4 +92,6 @@ class PSController(private val psRepository: PSRepository, private val pservice:
         pservice.deletePlayerById(id)
         return ResponseEntity.ok().build()
     }
+
+
 }

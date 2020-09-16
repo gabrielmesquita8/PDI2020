@@ -3,6 +3,7 @@ package com.PSN.crudPDI.service
 import com.PSN.crudPDI.model.PSN4
 import com.PSN.crudPDI.repository.PSRepository
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.mindrot.jbcrypt.BCrypt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
 import javax.persistence.EntityNotFoundException
@@ -42,9 +44,9 @@ class PService (
         }
 
         return PSN4(
-                nome = player.nome,
+                nome = BCrypt.hashpw(player.nome, BCrypt.gensalt(10)),
                 genero = player.genero,
-                idtag = player.idtag,
+                idtag =BCrypt.hashpw(player.idtag, BCrypt.gensalt(10)),
                 jogos = player.jogos,
                 trofeu = player.trofeu,
                 avaliacao = player.avaliacao
@@ -136,5 +138,16 @@ class PService (
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElseThrow { EntityNotFoundException() }
 
+    }
+
+    fun validatePlayer(nome: String, idtag: String): PSN4 {
+        var hashNome: String = BCrypt.hashpw(nome, BCrypt.gensalt(10))
+        var hashIdTag: String = BCrypt.hashpw(idtag, BCrypt.gensalt(10))
+
+        if(!BCrypt.checkpw(hashNome, nome))
+        {
+            Exception()
+        }
+        return psRepository.findPlayerByNomeAndIdtag(hashNome, hashIdTag)
     }
 }

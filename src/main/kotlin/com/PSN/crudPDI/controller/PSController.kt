@@ -16,9 +16,10 @@ class PSController(private val psRepository: PSRepository, private val pservice:
     fun loginUser(@RequestBody userMap: Map<String, String>): ResponseEntity<Map<String, Any>> {
         val nome = userMap["nome"] as String
         val idtag = userMap["idtag"] as String
-        val user: PSN4? = pservice.validatePlayer(nome, idtag)
-        return ResponseEntity(userMap, HttpStatus.OK)
+        val user: PSN4 = pservice.validatePlayer(nome, idtag)
+        return ResponseEntity(pservice.generateJWTToken(user), HttpStatus.OK)
     }
+
     @GetMapping("/allPlayers")
     fun getAllPlayers(): MutableIterable<PSN4> =
             pservice.getAllPlayers()
@@ -92,6 +93,5 @@ class PSController(private val psRepository: PSRepository, private val pservice:
         pservice.deletePlayerById(id)
         return ResponseEntity.ok().build()
     }
-
 
 }

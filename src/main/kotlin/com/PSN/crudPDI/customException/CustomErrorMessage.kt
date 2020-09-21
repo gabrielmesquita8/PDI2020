@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.util.*
@@ -29,12 +30,11 @@ class CustomErrorMessage : ResponseEntityExceptionHandler()
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler(HttpClientErrorException.Unauthorized::class)
-    fun handlerUnauthorized(ex: Exception, request: WebRequest?): ResponseEntity<Any>? {
+    @ExceptionHandler(HttpServerErrorException.InternalServerError::class)
+    fun handleServerError(ex: Exception, request: WebRequest?): ResponseEntity<Any?> {
         val details: MutableList<String> = ArrayList()
-        details.add("nome/idtag são invalidos")
-        val error = ErrorResponse(Date(), 401, details)
-        return ResponseEntity(error, HttpStatus.UNAUTHORIZED)
+        details.add("Ocorreu um erro com a aplicação.")
+        val error = ErrorResponse(Date(), 400, details)
+        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
-
 }

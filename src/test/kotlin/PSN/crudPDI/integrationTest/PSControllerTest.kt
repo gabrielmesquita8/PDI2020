@@ -1,22 +1,18 @@
 package com.PSN.crudPDI.integrationTest
 
+import PSN.crudPDI.integrationTest.tokenTest
 import com.PSN.crudPDI.app.CrudPsnApplication
 import com.PSN.crudPDI.model.PSN4
 import com.PSN.crudPDI.repository.PSRepository
 import io.restassured.RestAssured.*
-import io.restassured.config.EncoderConfig.encoderConfig
-import io.restassured.http.ContentType
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.apache.http.entity.ContentType.APPLICATION_JSON
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,19 +21,23 @@ import org.springframework.test.annotation.DirtiesContext
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [CrudPsnApplication::class])
-class PSControllerTest {
+class PSControllerTest : tokenTest(){
 
     @Autowired
     private lateinit var repository: PSRepository
     private val PATH: String = "/CrudPDI"
 
     @LocalServerPort
-    internal var port: Int = 0
+    internal override var port: Int = 0
 
     @Test
     fun `Dado que a operação seja um sucesso é retornado uma lista com todos os jogadores`() {
         val findBD = repository.findAll()
         val findAPI = given()
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
                 .port(port)
                 .log().all()
                 .contentType("application/json")

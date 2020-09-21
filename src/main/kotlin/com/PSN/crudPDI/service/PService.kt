@@ -1,8 +1,12 @@
 package com.PSN.crudPDI.service
 
+import com.PSN.crudPDI.Constants
 import com.PSN.crudPDI.model.PSN4
 import com.PSN.crudPDI.repository.PSRepository
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.jsonwebtoken.JwtBuilder
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -140,14 +144,31 @@ class PService (
 
     }
 
+    @PostMapping("/login")
     fun validatePlayer(nome: String, idtag: String): PSN4 {
+
         var hashNome: String = BCrypt.hashpw(nome, BCrypt.gensalt(10))
         var hashIdTag: String = BCrypt.hashpw(idtag, BCrypt.gensalt(10))
 
-        if(!BCrypt.checkpw(hashNome, nome))
-        {
-            Exception()
-        }
-        return psRepository.findPlayerByNomeAndIdtag(hashNome, hashIdTag)
+        return psRepository.findPlayerByNomeAndIdtag(nome, idtag)
+    }
+
+    fun generateJWTToken(player: PSN4): Map<String, String>
+    {
+        val timestamp: Long = System.currentTimeMillis()
+        val token: String = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY)
+                .setIssuedAt(Date(timestamp))
+                .setExpiration(Date(timestamp + Constants.TOKEN_VALIDITY))
+                .claim("id", player.id)
+                .claim("nome", player.nome)
+                .claim("genero", player.genero)
+                .claim("idtag", player.idtag)
+                .claim("jogos", player.jogos)
+                .claim("trofeu", player.trofeu)
+                .claim("avaliacao", player.avaliacao)
+                .compact()
+        val otherMap: MutableMap<String, String> = HashMap()
+        otherMap["token"] = token
+        return otherMap
     }
 }

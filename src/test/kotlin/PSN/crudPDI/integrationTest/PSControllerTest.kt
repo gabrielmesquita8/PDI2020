@@ -4,31 +4,29 @@ import PSN.crudPDI.integrationTest.tokenTest
 import com.PSN.crudPDI.app.CrudPsnApplication
 import com.PSN.crudPDI.model.PSN4
 import com.PSN.crudPDI.repository.PSRepository
-import io.restassured.RestAssured.*
-import org.springframework.http.HttpStatus.BAD_REQUEST
-import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.HttpStatus.NOT_FOUND
-import org.springframework.http.HttpStatus.NO_CONTENT
-import org.springframework.http.HttpStatus.OK
+import io.restassured.RestAssured.expect
+import io.restassured.RestAssured.given
 import org.apache.http.entity.ContentType.APPLICATION_JSON
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.http.HttpStatus.*
 import org.springframework.test.annotation.DirtiesContext
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [CrudPsnApplication::class])
-class PSControllerTest : tokenTest(){
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = [CrudPsnApplication::class])
+class PSControllerTest : tokenTest() {
 
     @Autowired
     private lateinit var repository: PSRepository
     private val PATH: String = "/CrudPDI"
 
     @LocalServerPort
-    internal override var port: Int = 0
+    override var port: Int = 0
 
     @Test
     fun `Dado que a operação seja um sucesso é retornado uma lista com todos os jogadores`() {
@@ -47,9 +45,9 @@ class PSControllerTest : tokenTest(){
                 .log().all()
                 .statusCode(OK.value())
                 .spec(
-                    expect()
-                        .header("content-type", `is`(("application/json")))
-                        .body("$", not(emptyOrNullString()))
+                        expect()
+                                .header("content-type", `is`(("application/json")))
+                                .body("$", not(emptyOrNullString()))
                 )
                 .extract().body().jsonPath().getList(".", PSN4::class.java)
         assertThat(findAPI).isEqualTo(findBD)
@@ -60,6 +58,10 @@ class PSControllerTest : tokenTest(){
         val id: Long = 1
         val findBD = repository.findById(id)
         val findAPI = given()
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
                 .port(port)
                 .log().all()
                 .contentType(APPLICATION_JSON.toString())
@@ -79,15 +81,19 @@ class PSControllerTest : tokenTest(){
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(player)
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .post("$PATH")
-            .then()
-            .log().all()
-            .statusCode(CREATED.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .post("$PATH")
+                .then()
+                .log().all()
+                .statusCode(CREATED.value())
 
 
         val id: Long = player.id
@@ -108,15 +114,19 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get().nome).isNotEqualTo(value["nome"])
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/nome/$id")
-            .then()
-            .log().all()
-            .statusCode(NO_CONTENT.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/nome/$id")
+                .then()
+                .log().all()
+                .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
         assertThat(validatePlayer.get().nome).isEqualTo(value["nome"])
@@ -133,15 +143,19 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get().genero).isNotEqualTo(value["genero"])
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/genero/$id")
-            .then()
-            .log().all()
-            .statusCode(NO_CONTENT.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/genero/$id")
+                .then()
+                .log().all()
+                .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
         assertThat(validatePlayer.get().genero).isEqualTo(value["genero"])
@@ -158,15 +172,19 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get().idtag).isNotEqualTo(value["idtag"])
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/IdTag/$id")
-            .then()
-            .log().all()
-            .statusCode(NO_CONTENT.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/IdTag/$id")
+                .then()
+                .log().all()
+                .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
         assertThat(validatePlayer.get().idtag).isEqualTo(value["idtag"])
@@ -183,15 +201,19 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get().jogos).isNotEqualTo(value["jogos"])
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/jogos/$id")
-            .then()
-            .log().all()
-            .statusCode(NO_CONTENT.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/jogos/$id")
+                .then()
+                .log().all()
+                .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
         assertThat(validatePlayer.get().jogos).isEqualTo(value["jogos"])
@@ -208,15 +230,19 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get().trofeu).isNotEqualTo(value["trofeu"])
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/trofeu/$id")
-            .then()
-            .log().all()
-            .statusCode(NO_CONTENT.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/trofeu/$id")
+                .then()
+                .log().all()
+                .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
         assertThat(validatePlayer.get().trofeu).isEqualTo(value["trofeu"])
@@ -233,15 +259,19 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get().avaliacao).isNotEqualTo(value["avaliacao"])
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/avaliacao/$id")
-            .then()
-            .log().all()
-            .statusCode(NO_CONTENT.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/avaliacao/$id")
+                .then()
+                .log().all()
+                .statusCode(NO_CONTENT.value())
 
         val validatePlayer = repository.findById(id)
         assertThat(validatePlayer.get().avaliacao).isEqualTo(value["avaliacao"])
@@ -254,31 +284,39 @@ class PSControllerTest : tokenTest(){
         val id: Long = 1
 
         given()
-            .port(port)
-            .log().all()
-            .contentType(APPLICATION_JSON.toString())
-            .`when`()
-            .delete("$PATH/delPSN/$id")
-            .then()
-            .log().all()
-            .statusCode(OK.value())
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType(APPLICATION_JSON.toString())
+                .`when`()
+                .delete("$PATH/delPSN/$id")
+                .then()
+                .log().all()
+                .statusCode(OK.value())
 
         given()
-            .port(port)
-            .log().all()
-            .contentType("application/json")
-            .`when`()
-            .get("$PATH/idPlayer/$id")
-            .then()
-            .log().all()
-            .statusCode(NOT_FOUND.value())
-            .spec(
-                expect()
-                    .header("content-type", `is`(("application/json")))
-                    .body("timestamp", `is`(not(emptyOrNullString())))
-                    .body("status", `is`(equalTo(NOT_FOUND.value())))
-                    .body("message", hasItem("O Id buscado não existe!"))
-            )
+                .header(
+                        "Authorization",
+                        "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType("application/json")
+                .`when`()
+                .get("$PATH/idPlayer/$id")
+                .then()
+                .log().all()
+                .statusCode(NOT_FOUND.value())
+                .spec(
+                        expect()
+                                .header("content-type", `is`(("application/json")))
+                                .body("timestamp", `is`(not(emptyOrNullString())))
+                                .body("status", `is`(equalTo(NOT_FOUND.value())))
+                                .body("message", hasItem("O Id buscado não existe!"))
+                )
     }
 
     @Test
@@ -286,21 +324,25 @@ class PSControllerTest : tokenTest(){
         val id: Long = 18
 
         given()
-            .port(port)
-            .log().all()
-            .contentType("application/json")
-            .`when`()
-            .get("$PATH/idPlayer/$id")
-            .then()
-            .log().all()
-            .statusCode(NOT_FOUND.value())
-            .spec(
-                expect()
-                    .header("content-type", `is`(("application/json")))
-                    .body("timestamp", `is`(not(emptyOrNullString())))
-                    .body("status", `is`(equalTo(NOT_FOUND.value())))
-                    .body("message", hasItem("O Id buscado não existe!"))
-            )
+                .header(
+                    "Authorization",
+                    "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType("application/json")
+                .`when`()
+                .get("$PATH/idPlayer/$id")
+                .then()
+                .log().all()
+                .statusCode(NOT_FOUND.value())
+                .spec(
+                        expect()
+                                .header("content-type", `is`(("application/json")))
+                                .body("timestamp", `is`(not(emptyOrNullString())))
+                                .body("status", `is`(equalTo(NOT_FOUND.value())))
+                                .body("message", hasItem("O Id buscado não existe!"))
+                )
     }
 
     @Test
@@ -309,6 +351,10 @@ class PSControllerTest : tokenTest(){
         val payload = com.fasterxml.jackson.databind.ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(player)
 
         given()
+            .header(
+                "Authorization",
+                "Bearer $token"
+            )
             .port(port)
             .log().all()
             .contentType("application/json")
@@ -336,22 +382,26 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get()).isNotEqualTo(value)
 
         given()
-            .port(port)
-            .log().all()
-            .contentType("application/json")
-            .`when`()
-            .body(payload)
-            .patch("$PATH/PSN/nome/$id")
-            .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value())
-            .spec(
-                expect()
-                    .header("content-type", `is`(("application/json")))
-                    .body("timestamp", `is`(not(emptyOrNullString())))
-                    .body("status", `is`(equalTo(BAD_REQUEST.value())))
-                    .body("message", hasItem("Ocorreu um erro em sua requisição, verifique sua sintaxe!"))
-            )
+                .header(
+                    "Authorization",
+                    "Bearer $token"
+                )
+                .port(port)
+                .log().all()
+                .contentType("application/json")
+                .`when`()
+                .body(payload)
+                .patch("$PATH/PSN/nome/$id")
+                .then()
+                .log().all()
+                .statusCode(BAD_REQUEST.value())
+                .spec(
+                    expect()
+                        .header("content-type", `is`(("application/json")))
+                        .body("timestamp", `is`(not(emptyOrNullString())))
+                        .body("status", `is`(equalTo(BAD_REQUEST.value())))
+                        .body("message", hasItem("Ocorreu um erro em sua requisição, verifique sua sintaxe!"))
+                )
 
         val after = repository.findById(id)
         assertThat(after).isNotEqualTo(payload)
@@ -366,6 +416,10 @@ class PSControllerTest : tokenTest(){
         assertThat(before.get()).isNotEqualTo(value)
 
         given()
+            .header(
+                "Authorization",
+                "Bearer $token"
+            )
             .port(port)
             .log().all()
             .contentType("application/json")
@@ -386,5 +440,7 @@ class PSControllerTest : tokenTest(){
         val after = repository.findById(id)
         assertThat(after).isNotEqualTo(payload)
     }
+
+   //TODO validar se vale a pena realizar testes negativos sobre o token( como fazer um refresh no token após executar cada teste?)
 
 }

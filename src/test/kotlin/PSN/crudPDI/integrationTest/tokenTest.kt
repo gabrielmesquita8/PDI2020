@@ -27,7 +27,7 @@ class tokenTest {
                 .log().all()
                 .contentType("application/json")
                 .`when`()
-                .body(mapOf("nome" to "Jon Snow",("idtag" to "Targaryen")) )
+                .body(mapOf("nome" to "Jon Snow",("idtag" to "Targaryen")))
                 .post(ENDPOINT)
                 .then()
                 .log().all()
@@ -37,7 +37,6 @@ class tokenTest {
                         .header("content-type", Matchers.`is`(("application/json")))
                         .body(Matchers.not(Matchers.emptyOrNullString()))
                 )
-                .extract()
-                .asString()
+                .extract().jsonPath().getString("token")
     }
 }

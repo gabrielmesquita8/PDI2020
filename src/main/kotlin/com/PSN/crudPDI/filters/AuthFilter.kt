@@ -19,14 +19,18 @@ class AuthFilter: GenericFilterBean() {
         val httpRequest = servletRequest as HttpServletRequest
         val httpResponse: HttpServletResponse = servletResponse as HttpServletResponse
 
+        //validação da rota de login
         if (publicRoute(servletRequest)) {
             httpResponse.setStatus(HttpServletResponse.SC_OK);
             chain.doFilter(servletRequest, servletResponse)
-
         }else
         {
             val authHeader: String = httpRequest.getHeader("Authorization")
 
+            /*
+            Condição que valida se existe algo no header. Após isso valida o valor sendo uma String Bearer e em seguida
+            retorna o token gerado pela aplicação.
+             */
             if(authHeader != null)
             {
                 val authHeaderArr = authHeader.split("Bearer ")
@@ -35,9 +39,9 @@ class AuthFilter: GenericFilterBean() {
                 {
                     val token: String = authHeaderArr[1]
                     try{
-                        val claims: Claims = Jwts.parser().setSigningKey(Constants.API_SECRET_KEY)
+                           Jwts.parser().setSigningKey(Constants.API_SECRET_KEY)
                                 .parseClaimsJws(token).body
-                        httpRequest.setAttribute("id", Integer.parseInt(claims.get("id").toString()))
+                       // httpRequest.setAttribute("id", Integer.parseInt(claims.get("id").toString()))
                     }
                     catch (e: Exception)
                     {

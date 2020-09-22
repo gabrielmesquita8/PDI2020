@@ -33,7 +33,7 @@ class CustomErrorMessage : ResponseEntityExceptionHandler()
     @ExceptionHandler(HttpServerErrorException.InternalServerError::class)
     fun handleServerError(ex: Exception, request: WebRequest?): ResponseEntity<Any?> {
         val details: MutableList<String> = ArrayList()
-        details.add("Ocorreu um erro com a aplicação.")
+        details.add("Ocorreu um erro na aplicação.")
         val error = ErrorResponse(Date(), 400, details)
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }

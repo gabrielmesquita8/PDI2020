@@ -9,6 +9,8 @@ import io.restassured.RestAssured.given
 import org.apache.http.entity.ContentType.APPLICATION_JSON
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,13 +19,24 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus.*
 import org.springframework.test.annotation.DirtiesContext
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = [CrudPsnApplication::class])
 class PSControllerTest : tokenTest() {
 
     @Autowired
     private lateinit var repository: PSRepository
     private val PATH: String = "/CrudPDI"
+    private lateinit var dump: List<PSN4>
+
+    @BeforeEach
+    fun setUpEach() {
+        dump = repository.findAll() as List<PSN4>
+    }
+
+    @AfterEach
+    fun cleanUpEach() {
+        repository.saveAll(dump)
+    }
 
     @LocalServerPort
     override var port: Int = 0

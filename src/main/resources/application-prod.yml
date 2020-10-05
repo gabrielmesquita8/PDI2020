@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postBD
+    username: docker
+    password: docker
+    driverClassName: org.postgresql.Driver
+
+  flyway:
+    location: classpath:postgres/migration
+    table: schema_history

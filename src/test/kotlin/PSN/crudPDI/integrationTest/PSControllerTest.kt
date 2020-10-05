@@ -281,7 +281,7 @@ class PSControllerTest : tokenTest() {
     @Test
     fun `Quando realiza uma operação de DELETE com dados corretos a operação deve ser executada com sucesso`() {
 
-        val id: Long = 1
+        val id: Long = 2
 
         given()
                 .header(

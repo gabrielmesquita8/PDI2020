@@ -1,9 +1,21 @@
 version: "3"
 services:
+  pdi:
+   image: pdi2020:latest
+   container_name: cont
+   expose:
+    - 8080
+   ports:
+    - 8080:8080
+   environment:
+    - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/postBD
+    - SPRING_DATASOURCE_USERNAME=docker
+    - SPRING_DATASOURCE_PASSWORD=docker
+   links:
+    - postgres:database
   postgres:
     image: postgres:latest
-    network_mode: bridge
-    container_name: postgres
+    container_name: bd
     restart: always
     expose:
       - 5432

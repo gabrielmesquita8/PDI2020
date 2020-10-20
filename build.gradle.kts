@@ -39,7 +39,7 @@ dependencies {
 	testImplementation("io.rest-assured:xml-path:3.1.1")
 	testImplementation("io.rest-assured:json-schema-validator:3.1.1")
 	testImplementation("org.assertj:assertj-core:3.16.1")
-
+	testImplementation ("org.testcontainers:testcontainers:1.14.3")
 }
 tasks["check"].dependsOn("integrationTest")
 
